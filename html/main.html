@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>六合彩</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/navbar.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script>
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">香港六合彩</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Contact</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
+              <li><a href="../navbar-static-top/">Static top</a></li>
+              <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="container-fluid">
+        <div class="span8">
+          <!--<form role="form" class="form-horizontal">-->
+            <div >
+              <hr>
+              <label>特 码</label>
+              <hr>
+              <div id="temarow">
+                <script>
+                  n = 1
+                  for (var i=0; i<5; ++i)
+                  {
+                    mm = 10;
+                    if (i == 4)
+                      mm = 9;
+                    document.write("<div class=\"row\">");
+                    for (var j=0; j<mm; ++j)
+                    {
+                      num = "";
+                      if (n < 10)
+                        num = "0" + n;
+                      else
+                        num += n; 
+                      row = "<div class=\"col-md-1\"> <label class=\"control-label\">"+num+"</label> <input type=\"text\" class=\"form-control\" name=\"d_tema"+n+"\" placeholder=\"0\"></div>"
+                      ++n;
+                      document.write(row);
+                    }
+                    document.write("</div>")
+                  }
+                </script>
+                <!--<div class="col-md-1">
+                  <label class="control-label">01</label>
+                  <input type="email" class="form-control" id="tema01" placeholder="0">
+                </div>-->  
+              </div>
+              
+              <hr>
+              <label>生 肖</label>
+              <hr>
+              <div id="shengxiao">
+                <div class="row" id="sxcheckbox">
+                <script>
+                var sxArr = ["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
+                for (var i=0; i<12; ++i)
+                {
+                  row = "<div class=\"col-md-1\"> <label  style=\"font-size:20px;\">"+sxArr[i]+"</label> &nbsp;<input type=\"checkbox\" style=\"zoom:150%\" name=\"sesx\" value=\""+sxArr[i]+"\"></div>";
+                  document.write(row);
+                }
+                </script>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-1"><label class="control-label">金  额 ：</label></div>
+                  <div class="col-md-2"><input type="text" name="sx_amount" class="form-control" id="sx_amount" placeholder="0"></div>
+                  <div class="col-md-2"><button class="btn btn-primary btn-md" id="sxbutton" onclick="buybtnClick('sesx','sx')">确  认</button></div>
+                </div>
+                <br>
+                <div id="sxbuy"></div>  
+                
+              </div>
+
+              <hr>
+              <label>波 色</label>
+              <hr>
+              <div id="bose">
+                <div class="row">
+                  <script>
+                    var item = ["红","红单","红双","绿","绿单","绿双","蓝","蓝单","蓝双"];
+                    var value = ["red", "red_odd", "red_even", "green", "green_odd", "green_even", "blue", "blue_odd", "blue_even"];
+                    var value1 = ["red", "red", "red", "green", "green", "green", "blue", "blue", "blue"];
+                    
+                    for (var i=0; i<9; ++i)
+                    {
+                      if (i!=0 && i % 3 == 0)
+                        document.write("<div class=\"col-md-1\"></div>");
+
+                      ht = "<div class=\"col-md-1\"><label style=\"font-size:20px;\">"+item[i]+"</label>&nbsp;<input type=\"radio\" id=\""+value[i]+"\" name=\""+value1[i]+"\" value=\""+item[i]+"\" style=\"zoom:150%\" onclick='check(this)'></div>";
+                      document.write(ht);
+                    }  
+                  </script>
+                  
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-1"><label class="control-label">金  额 ：</label></div>
+                  <div class="col-md-2"><input type="text" class="form-control" id="col_amount" placeholder="0"></div>
+                  <div class="col-md-2"><button class="btn btn-primary btn-md" onclick="buybtnClick('red:green:blue', 'col')">确  认</button></div>
+                </div>
+                <br>
+                <div id="colbuy"></div>
+              </div>
+
+              <hr>
+              <label>单 双</label>
+              <hr>
+              <div id="danshuang">
+                <div class="row">
+                <script>
+                  dsitem = ["单","双","大","小","合单","合双"]; 
+                  for (var i=0; i<dsitem.length; ++i)
+                  {
+                    if (i!=0 && i % 2 == 0)
+                      document.write("<div class=\"col-md-1\"></div>");
+
+                    ht = "<div class=\"col-md-1\"><label style=\"font-size:20px;\">"+dsitem[i]+"</label>&nbsp;<input type=\"radio\" id=\""+value[i]+"\" name=\"dsdx\" value=\""+dsitem[i]+"\" style=\"zoom:150%\" onclick='check(this)'></div>";
+                      document.write(ht);
+                  }
+                </script>
+                <!--<div class="row">
+                  <div class="col-md-1"><label style="font-size:20px;">单</label>&nbsp;&nbsp;&nbsp;<input type="radio" style="zoom:150%" id="odd" name="odd_even" value="单" onclick='check(this)'></div>
+                  <div class="col-md-1"></div>
+                  <div class="col-md-1"><label style="font-size:20px;">双</label>&nbsp;&nbsp;&nbsp;<input type="radio" style="zoom:150%" id="even" name="odd_even" value="双" onclick='check(this)'></div>
+                -->
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-1"><label class="control-label">金  额 ：</label></div>
+                  <div class="col-md-2"><input type="text" class="form-control" id="dsdx_amount" placeholder="0"></div>
+                  <div class="col-md-2"><button class="btn btn-primary btn-md" onclick="buybtnClick('dsdx', 'dsdx')">确认</button></div>
+                </div>
+                <br>
+                <div id="dsdxbuy"></div>
+
+              </div>
+              <hr>
+              <div id="tijiao">
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-8"><button class="btn btn-success btn-md" onclick="btnsubmit()">提 交 订 单</button></div>
+                </div>
+              </div>
+             </div>
+          <!--</form>-->
+        </div>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script srt="js/jquery.json.min.js"></script>
+    <script type="text/javascript">
+      var tempradio= null;  
+      var sxN = 0;  
+      function check(checkedRadio)    
+      {    
+        if (tempradio== checkedRadio){  
+          tempradio.checked=false;  
+          tempradio=null;  
+        }   
+        else {  
+          tempradio= checkedRadio;    
+        }  
+      } 
+
+      function sxbtnClick() {
+        var chk_value = [];
+        var vv = "";
+        var inputname = "sesx"; 
+        $('input[name='+inputname+']:checked').each(function(){
+          //chk_value.push($(this).val());
+          vv += sxArr[parseInt($(this).val())] + "&nbsp &nbsp";
+        });
+        //alert("dfdf"+vv+"---");
+        var amount = $("#sx_amount").val();    // notice the illegal input
+        //alert(amount);
+        $("#sxbuy").append("<div class=\"row\" id=\"sxitem"+sxN+"\"><div class=\"col-md-4\"><label>"+vv+"</label></div><div class=\"col-md-2\"><input type=\"text\" value=\""+amount+"\" class=\"form-control\"></div> <div class=\"col-md-2\"><button class=\"btn btn-success btn-md\" onclick=\"delElementByID('sxitem"+sxN+"')\">删 除</button></div><br></div>");
+        sxN += 1;
+      }
+
+      function buybtnClick(checks, name) {
+        var chk_value = [];
+        var vv = "";
+        var checkArr = new Array();
+        checkArr = checks.split(":");
+        //alert(typeof(checkArr));
+        for (var i=0; i<checkArr.length; ++i)
+        {
+          $('input[name='+checkArr[i]+']:checked').each(function(){
+            //chk_value.push($(this).val());
+            vv += $(this).val() + "  ";
+          });
+        }
+        //alert("dfdf"+vv+"---");
+        var amount = $("#"+name+"_amount").val();    // notice the illegal input
+        setInputText0(name+"_amount");
+        //alert(amount);
+        div_id = name + "item" + sxN;
+        $("#"+name+"buy").append("<div class=\"row\" id=\""+div_id+"\"><div class=\"col-md-4\"><label>"+vv+"</label></div><div class=\"col-md-2\"><input type=\"text\" value=\""+amount+"\" class=\"form-control\" name=\"d_"+vv+"\"></div> <div class=\"col-md-2\"><button class=\"btn btn-success btn-md\" onclick=\"delElementByID('"+div_id+"')\">删 除</button></div><br></div>");
+        sxN += 1;
+      }
+
+      function delElementByID(divID) {
+        $("#"+divID).remove(); 
+      }
+
+      function setInputText0(divID) {
+        $("#"+divID).val("");
+      }
+
+      function isNum(val) {
+        var z= /^[0-9]*$/;
+        return z.test(val);
+      }
+
+      function btnsubmit() {
+        var res = {};
+        //sum = "";
+        //names = "";
+        $(":text[name^='d_']").each(function(){
+          if ($(this).val().length != 0 && isNum($(this).val()))
+          {
+            //names += $(this).attr("name");
+            res[$(this).attr("name")] = $(this).val();
+            //sum+=$(this).val();
+          }
+          if (!isNum($(this).val()))
+          {
+            alert("输入错误！ "+$(this).attr("name")+"："+$(this).val()+"，只能输入数字，请从新输入！");
+            return;
+          }
+        });
+        var jsondata = JSON.stringify(res); 
+        
+        alert("json" + jsondata);
+        //alert("ids " +names)
+        //alert("sum "+sum);
+      }
+    </script>
+    <script type="text/javascript">
+      //$(document).ready(function(){
+      //  $("#sxbutton").click(function() {
+      //      $("#sxbuy").append("<label>hello world</label>");
+      //  });
+      //});
+    </script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $("p").append(" <b>Appended text</b>.");
+  });
+
+  $("#btn2").click(function(){
+    $("ol").append("<li>Appended item</li>");
+  });
+});
+</script>
+</head>
+
+<body>
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+
+<script type="text/javascript">
+var t=escape('${title}');
+var c=escape('${content}');
+</script>
+<button type="button" onclick="f_point('t,c');">aaass</button>
+<label id="point"/>
+<script type="text/javascript">
+function f_point(title,content)
+{
+document.getElementById("point").innerHTML = unescape(title)+"<br>"+unescape(content);
+}
+</script>
+<ol>
+<li>List item 1</li>
+<li>List item 2</li>
+<li>List item 3</li>
+</ol>
+<button id="btn1">wwwww</button>
+<button id="btn2">afdasf</button>
+
+<div id="1234"></div>
+<script>
+  n = 2
+  ht = "<label >this is a test"+n+"</label>";
+  document.write("<label id=\"ad\">this is a test</label>");
+  $("#1234").html(ht);
+</script>
+
+</body>
+</html>
