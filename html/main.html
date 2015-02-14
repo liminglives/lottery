@@ -25,7 +25,6 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
   </head>
 
   <body>
@@ -46,10 +45,11 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">特码</a></li>
-              <li><a href="#">平码</a></li>
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Contact</a></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">更多 <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="#">Action</a></li>
                   <li><a href="#">Another action</a></li>
@@ -62,9 +62,9 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="./">我的订单<span class="sr-only">(current)</span></a></li>
-              <li><a href="./">个人设置</a></li>
-              <li><a href="./">退出</a></li>
+              <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
+              <li><a href="../navbar-static-top/">Static top</a></li>
+              <li><a href="../navbar-fixed-top/">Fixed top</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -94,7 +94,7 @@
                         num = "0" + n;
                       else
                         num += n; 
-                      row = "<div class=\"col-md-1\"> <label class=\"control-label\">"+num+"</label> <input type=\"text\" class=\"form-control\" name=\"d_tema_"+num+"\" placeholder=\"0\"></div>"
+                      row = "<div class=\"col-md-1\"> <label class=\"control-label\">"+num+"</label> <input type=\"text\" class=\"form-control\" name=\"d_tema"+n+"\" placeholder=\"0\"></div>"
                       ++n;
                       document.write(row);
                     }
@@ -198,7 +198,7 @@
               <hr>
               <div id="tijiao">
                 <div class="row">
-                  <div class="col-md-4 col-md-offset-8"><button class="btn btn-lg btn-success btn-md" data-toggle="modal" data-target="#confirmModal" onclick="btnsubmit()">提 交 订 单</button></div>
+                  <div class="col-md-4 col-md-offset-8"><button class="btn btn-success btn-md" onclick="btnsubmit()">提 交 订 单</button></div>
                 </div>
               </div>
              </div>
@@ -207,25 +207,6 @@
       </div>
 
     </div> <!-- /container -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="confirmModalLabel">您的订单</h4>
-          </div>
-          <div class="modal-body" id="confirmModalBodyID">
-            
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">返回修改</button>
-            <button type="button" class="btn btn-primary" onclick="save()">确认订单</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 
     <!-- Bootstrap core JavaScript
@@ -236,15 +217,7 @@
     <script srt="js/jquery.json.min.js"></script>
     <script type="text/javascript">
       var tempradio= null;  
-      var sxN = 0;
-  
-      var _temabuy = {};
-      var _sxbuy = {};
-      var _colbuy = {};
-      var _dsdxbuy = {};
-      var res = {};
-      var sumbuy = 0;
-
+      var sxN = 0;  
       function check(checkedRadio)    
       {    
         if (tempradio== checkedRadio){  
@@ -271,10 +244,6 @@
         sxN += 1;
       }
 
-      function isExistByID(id) {
-        return document.getElementById(id);
-      }
-
       function buybtnClick(checks, name) {
         var chk_value = [];
         var vv = "";
@@ -285,20 +254,15 @@
         {
           $('input[name='+checkArr[i]+']:checked').each(function(){
             //chk_value.push($(this).val());
-            vv += $(this).val() + " ";
+            vv += $(this).val() + "  ";
           });
-        }
-        if (isExistByID(vv)) {
-          alert(vv + " 已经买入了！不能重复购买");
-          return;
         }
         //alert("dfdf"+vv+"---");
         var amount = $("#"+name+"_amount").val();    // notice the illegal input
         setInputText0(name+"_amount");
         //alert(amount);
-
         div_id = name + "item" + sxN;
-        $("#"+name+"buy").append("<div class=\"row\" id=\""+div_id+"\"><div class=\"col-md-4\"><label>"+vv+"</label></div><div class=\"col-md-2\"><input type=\"text\" value=\""+amount+"\" id=\""+vv+"\" class=\"form-control\" name=\"d_"+name+"_"+vv+"\"></div> <div class=\"col-md-2\"><button class=\"btn btn-success btn-md\" onclick=\"delElementByID('"+div_id+"')\">删 除</button></div><br></div>");
+        $("#"+name+"buy").append("<div class=\"row\" id=\""+div_id+"\"><div class=\"col-md-4\"><label>"+vv+"</label></div><div class=\"col-md-2\"><input type=\"text\" value=\""+amount+"\" class=\"form-control\" name=\"d_"+vv+"\"></div> <div class=\"col-md-2\"><button class=\"btn btn-success btn-md\" onclick=\"delElementByID('"+div_id+"')\">删 除</button></div><br></div>");
         sxN += 1;
       }
 
@@ -315,131 +279,26 @@
         return z.test(val);
       }
 
-      function isEmptyObject(obj){
-        for(var n in obj)
-          return false; 
-        return true; 
-      } 
-
-      function writeRow(buyname, rowNum, col_md)
-      {
-        var htmltext = "";
-        if (!isEmptyObject(buyname))
-        {
-          var num = 0;
-          htmltext += "<div class=\"row\">";
-
-          for (item in buyname)
-          {
-            if (num!=0 && num % rowNum == 0)
-              htmltext += "</div><div class=\"row\">";
-            num += 1;
-            htmltext += "<div class=\"col-md-"+col_md+"\"><label>"+item+" = "+buyname[item]+" 元"+"</label></div>";            
-          }
-          htmltext += "</div>";
-          htmltext += "<hr>";
-        }
-        return htmltext;
-      }
-
-      function writeConfirmModal()
-      {
-        var htmltext = "<div class=\"container-fluid\">";
-        /*
-        if (!isEmptyObject(_temabuy))
-        {
-          var num = 0;
-          htmltext += "<div class=\"row\">";
-
-          for (item in _temabuy)
-          {
-            if (num!=0 && num % 4 == 0)
-              htmltext += "</div><div class=\"row\">";
-            num += 1;
-            htmltext += "<div class=\"col-md-3\"><label>"+item+" = "+_temabuy[item]+" 元"+"</label></div>";            
-          }
-          htmltext += "</div>";
-        }*/
-        htmltext += writeRow(_temabuy, 4, 3);
-        htmltext += writeRow(_sxbuy, 2, 6);
-        htmltext += writeRow(_colbuy, 3, 4);
-        htmltext += writeRow(_dsdxbuy, 3, 4);
-
-        htmltext += "<div class=\"row\"><div class=\"col-md-4\"><label>总计： "+sumbuy+" 元"+"</label></div></div>";
-
-        htmltext += "</div>"
-        //alert("htmltext: "+htmltext);
-        $("#confirmModalBodyID").html(htmltext);
-      }
-
-      function getBuyName(inputname) {
-        var temp = new Array();
-        temp = inputname.split("_");
-        return temp[2];
-      }
-
       function btnsubmit() {
-        res = {};
+        var res = {};
         //sum = "";
         //names = "";
-        _temabuy = {};
-        _dsdxbuy = {};
-        _sxbuy = {};
-        _colbuy = {}; 
-        var isReturn = false;
-        var count = 0;
-        sumbuy = 0;
-
         $(":text[name^='d_']").each(function(){
           if ($(this).val().length != 0 && isNum($(this).val()))
           {
-            var inputname = $(this).attr("name");
-            var buyname = getBuyName(inputname);
-            var intvalue = parseInt($(this).val());
-
-            if (inputname.search("tema") != -1) {
-              _temabuy[buyname] = intvalue;
-            }
-            else if (inputname.search("col") != -1) {
-              //if (_colbuy.hasOwnProperty(buyname))
-              //  _colbuy[buyname] += intvalue;
-              //else
-                _colbuy[buyname] = intvalue; 
-            }
-            else if (inputname.search("sx") != -1) {
-              //if (_sxbuy.hasOwnProperty(buyname))
-              //  _sxbuy[buyname] += intvalue; 
-              //else
-                _sxbuy[buyname] = intvalue;
-            }
-            else if (inputname.search("dsdx") != -1) {
-              _dsdxbuy[buyname] = intvalue; 
-            }   
-
-            count += 1;
-            sumbuy += intvalue;          
+            //names += $(this).attr("name");
+            res[$(this).attr("name")] = $(this).val();
+            //sum+=$(this).val();
           }
           if (!isNum($(this).val()))
           {
             alert("输入错误！ "+$(this).attr("name")+"："+$(this).val()+"，只能输入数字，请从新输入！");
-            isReturn = true;
             return;
           }
         });
-
-        if (isReturn)
-          return;
-
-        if (count == 0)
-        {
-          alert("您没有买入任何特码，不能提交！");
-          return;
-        }
-        //_temabuy = res;
-        var jsondata = JSON.stringify(_sxbuy); 
+        var jsondata = JSON.stringify(res); 
         
         alert("json" + jsondata);
-        writeConfirmModal();
         //alert("ids " +names)
         //alert("sum "+sum);
       }
