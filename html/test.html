@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>test</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/navbar.css" rel="stylesheet">
+
 <script src="js/jquery.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
 <script>
 $(document).ready(function(){
   $("#btn1").click(function(){
@@ -12,13 +27,58 @@ $(document).ready(function(){
     $("ol").append("<li>Appended item</li>");
   });
 });
+
+  function save() {
+
+  }
 </script>
 </head>
 
 <body>
-<p>This is a paragraph.</p>
+<p id="sss">This is a paragraph.</p>
 <p>This is another paragraph.</p>
+<script>
+function isEmptyObject(obj){
+    for(var n in obj){return false} 
+    return true; 
+} 
+ 
+ 
+var a={"name":{},"phone":{}}
+//alert(a.hasOwnProperty("name"));//true
+if (document.getElementById("ss")) {
+  document.write("true sss");
+}
+else {
+  document.write("false  ");
+}
 
+</script>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="save()">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+
+<!--
 <script type="text/javascript">
 var t=escape('${title}');
 var c=escape('${content}');
@@ -45,7 +105,7 @@ document.getElementById("point").innerHTML = unescape(title)+"<br>"+unescape(con
   ht = "<label >this is a test"+n+"</label>";
   document.write("<label id=\"ad\">this is a test</label>");
   $("#1234").html(ht);
-</script>
+</script>-->
 
 </body>
 </html>
