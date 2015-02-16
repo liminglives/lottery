@@ -1,0 +1,409 @@
+{% extends 'client/base.html' %}
+{%load staticfiles%}
+
+{% block load_content %}
+
+        <div class="span8">
+          <!--<form role="form" class="form-horizontal">-->
+            <div >
+              <hr>
+              <label>特 码</label>
+              <hr>
+              <div id="temarow">
+                <script>
+                  n = 1
+                  for (var i=0; i<5; ++i)
+                  {
+                    mm = 10;
+                    if (i == 4)
+                      mm = 9;
+                    document.write("<div class=\"row\">");
+                    for (var j=0; j<mm; ++j)
+                    {
+                      num = "";
+                      if (n < 10)
+                        num = "0" + n;
+                      else
+                        num += n; 
+                      row = "<div class=\"col-md-1\"> <label class=\"control-label\">"+num+"</label> <input type=\"text\" class=\"form-control\" name=\"d_tema_"+num+"\" placeholder=\"0\"></div>"
+                      ++n;
+                      document.write(row);
+                    }
+                    document.write("</div>")
+                  }
+                </script>
+                <!--<div class="col-md-1">
+                  <label class="control-label">01</label>
+                  <input type="email" class="form-control" id="tema01" placeholder="0">
+                </div>-->  
+              </div>
+              
+              <hr>
+              <label>生 肖</label>
+              <hr>
+              <div id="shengxiao">
+                <div class="row" id="sxcheckbox">
+                <script>
+                var sxArr = ["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
+                for (var i=0; i<12; ++i)
+                {
+                  row = "<div class=\"col-md-1\"> <label  style=\"font-size:20px;\">"+sxArr[i]+"</label> &nbsp;<input type=\"checkbox\" style=\"zoom:150%\" name=\"sesx\" value=\""+sxArr[i]+"\"></div>";
+                  document.write(row);
+                }
+                </script>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-1"><label class="control-label">金  额 ：</label></div>
+                  <div class="col-md-2"><input type="text" name="sx_amount" class="form-control" id="sx_amount" placeholder="0"></div>
+                  <div class="col-md-2"><button class="btn btn-primary btn-md" id="sxbutton" onclick="buybtnClick('sesx','sx')">确  认</button></div>
+                </div>
+                <br>
+                <div id="sxbuy"></div>  
+                
+              </div>
+
+              <hr>
+              <label>波 色</label>
+              <hr>
+              <div id="bose">
+                <div class="row">
+                  <script>
+                    var item = ["红","红单","红双","绿","绿单","绿双","蓝","蓝单","蓝双"];
+                    var value = ["red", "red_odd", "red_even", "green", "green_odd", "green_even", "blue", "blue_odd", "blue_even"];
+                    var value1 = ["red", "red", "red", "green", "green", "green", "blue", "blue", "blue"];
+                    
+                    for (var i=0; i<9; ++i)
+                    {
+                      if (i!=0 && i % 3 == 0)
+                        document.write("<div class=\"col-md-1\"></div>");
+
+                      ht = "<div class=\"col-md-1\"><label style=\"font-size:20px;\">"+item[i]+"</label>&nbsp;<input type=\"radio\" id=\""+value[i]+"\" name=\""+value1[i]+"\" value=\""+item[i]+"\" style=\"zoom:150%\" onclick='check(this)'></div>";
+                      document.write(ht);
+                    }  
+                  </script>
+                  
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-1"><label class="control-label">金  额 ：</label></div>
+                  <div class="col-md-2"><input type="text" class="form-control" id="col_amount" placeholder="0"></div>
+                  <div class="col-md-2"><button class="btn btn-primary btn-md" onclick="buybtnClick('red:green:blue', 'col')">确  认</button></div>
+                </div>
+                <br>
+                <div id="colbuy"></div>
+              </div>
+
+              <hr>
+              <label>单 双</label>
+              <hr>
+              <div id="danshuang">
+                <div class="row">
+                <script>
+                  dsitem = ["单","双","大","小","合单","合双"]; 
+                  for (var i=0; i<dsitem.length; ++i)
+                  {
+                    if (i!=0 && i % 2 == 0)
+                      document.write("<div class=\"col-md-1\"></div>");
+
+                    ht = "<div class=\"col-md-1\"><label style=\"font-size:20px;\">"+dsitem[i]+"</label>&nbsp;<input type=\"radio\" id=\""+value[i]+"\" name=\"dsdx\" value=\""+dsitem[i]+"\" style=\"zoom:150%\" onclick='check(this)'></div>";
+                      document.write(ht);
+                  }
+                </script>
+                <!--<div class="row">
+                  <div class="col-md-1"><label style="font-size:20px;">单</label>&nbsp;&nbsp;&nbsp;<input type="radio" style="zoom:150%" id="odd" name="odd_even" value="单" onclick='check(this)'></div>
+                  <div class="col-md-1"></div>
+                  <div class="col-md-1"><label style="font-size:20px;">双</label>&nbsp;&nbsp;&nbsp;<input type="radio" style="zoom:150%" id="even" name="odd_even" value="双" onclick='check(this)'></div>
+                -->
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-1"><label class="control-label">金  额 ：</label></div>
+                  <div class="col-md-2"><input type="text" class="form-control" id="dsdx_amount" placeholder="0"></div>
+                  <div class="col-md-2"><button class="btn btn-primary btn-md" onclick="buybtnClick('dsdx', 'dsdx')">确认</button></div>
+                </div>
+                <br>
+                <div id="dsdxbuy"></div>
+
+              </div>
+              <hr>
+              <div id="tijiao">
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-8"><button class="btn btn-lg btn-success btn-md" data-toggle="modal" data-target="#confirmModal" onclick="btnsubmit()">提 交 订 单</button></div>
+                </div>
+              </div>
+             </div>
+          <!--</form>-->
+        </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="confirmModalLabel">您的订单</h4>
+          </div>
+          <div class="modal-body" id="confirmModalBodyID">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">返回修改</button>
+            <button type="button" class="btn btn-primary" onclick="submitData()">确认订单</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+{% endblock %}
+
+
+{% block load_js %}
+    <script src="{% static 'lottery/js/jquery.min.js' %}"></script>
+    <script src="{% static 'lottery/dist/js/bootstrap.min.js' %}"></script>
+    <script srt="{% static 'lottery/js/jquery.json.min.js' %}"></script>
+    <script type="text/javascript">
+      var tempradio= null;  
+      var sxN = 0;
+  
+      var _temabuy = {};
+      var _sxbuy = {};
+      var _colbuy = {};
+      var _dsdxbuy = {};
+      var res = {};
+      var sumbuy = 0;
+
+      function submitData() {
+        var databuy = {};
+        if (!isEmptyObject(_temabuy))
+          databuy["temabuy"] = _temabuy;
+        if (!isEmptyObject(_sxbuy))
+          databuy["sxbuy"] = _sxbuy;
+        if (!isEmptyObject(_colbuy))
+          databuy["colbuy"] = _colbuy;
+        if (!isEmptyObject(_dsdxbuy))
+          databuy["dsdxbuy"] = _dsdxbuy; 
+
+        $.post("submit/", 
+               {//"temabuy":JSON.stringify(_temabuy), 
+                //"sxbuy":JSON.stringify(_sxbuy),
+                //"colbuy":JSON.stringify(_colbuy),
+                //"dsdxbuy":JSON.stringify(_dsdxbuy),
+                "databuy":JSON.stringify(databuy),
+                "sumbuy":sumbuy})
+          .done(function(result) {window.location.href="success/"})
+          .fail(function(result) {alert("提交失败 "+result)})
+      }
+
+      function check(checkedRadio)    
+      {    
+        if (tempradio== checkedRadio){  
+          tempradio.checked=false;  
+          tempradio=null;  
+        }   
+        else {  
+          tempradio= checkedRadio;    
+        }  
+      } 
+
+      function sxbtnClick() {
+        var chk_value = [];
+        var vv = "";
+        var inputname = "sesx"; 
+        $('input[name='+inputname+']:checked').each(function(){
+          //chk_value.push($(this).val());
+          vv += sxArr[parseInt($(this).val())] + "&nbsp &nbsp";
+        });
+        //alert("dfdf"+vv+"---");
+        var amount = $("#sx_amount").val();    // notice the illegal input
+        //alert(amount);
+        $("#sxbuy").append("<div class=\"row\" id=\"sxitem"+sxN+"\"><div class=\"col-md-4\"><label>"+vv+"</label></div><div class=\"col-md-2\"><input type=\"text\" value=\""+amount+"\" class=\"form-control\"  placeholder=\"0\"></div> <div class=\"col-md-2\"><button class=\"btn btn-success btn-md\" onclick=\"delElementByID('sxitem"+sxN+"')\">删 除</button></div><br></div>");
+        sxN += 1;
+      }
+
+      function isExistByID(id) {
+        return document.getElementById(id);
+      }
+
+      function buybtnClick(checks, name) {
+        var chk_value = [];
+        var vv = "";
+        var checkArr = new Array();
+        checkArr = checks.split(":");
+        //alert(typeof(checkArr));
+        for (var i=0; i<checkArr.length; ++i)
+        {
+          $('input[name='+checkArr[i]+']:checked').each(function(){
+            //chk_value.push($(this).val());
+            vv += $(this).val() + " ";
+          });
+        }
+        if (vv == "")
+        {
+          alert("您没有任何选择，请选择至少一个选项！");
+          return ;
+        }
+        if (isExistByID(vv)) {
+          alert(vv + " 已经买入了！不能重复购买");
+          return;
+        }
+        //alert("dfdf"+vv+"---");
+        var amount = "";
+        amount = $("#"+name+"_amount").val();    // notice the illegal input
+        if (amount=="")
+        {
+          alert("请输入金额！");
+          return ;
+        }
+        setInputText0(name+"_amount");
+        //alert(amount);
+
+        div_id = name + "item" + sxN;
+        $("#"+name+"buy").append("<div class=\"row\" id=\""+div_id+"\"><div class=\"col-md-4\"><label>"+vv+"</label></div><div class=\"col-md-2\"><input type=\"text\" value=\""+amount+"\" id=\""+vv+"\" class=\"form-control\" name=\"d_"+name+"_"+vv+"\"></div> <div class=\"col-md-2\"><button class=\"btn btn-success btn-md\" onclick=\"delElementByID('"+div_id+"')\">删 除</button></div><br></div>");
+        sxN += 1;
+      }
+
+      function delElementByID(divID) {
+        $("#"+divID).remove(); 
+      }
+
+      function setInputText0(divID) {
+        $("#"+divID).val("");
+      }
+
+      function isNum(val) {
+        var z= /^[0-9]*$/;
+        return z.test(val);
+      }
+
+      function isEmptyObject(obj){
+        for(var n in obj)
+          return false; 
+        return true; 
+      } 
+
+      function writeRow(buyname, rowNum, col_md)
+      {
+        var htmltext = "";
+        if (!isEmptyObject(buyname))
+        {
+          var num = 0;
+          htmltext += "<div class=\"row\">";
+
+          for (item in buyname)
+          {
+            if (num!=0 && num % rowNum == 0)
+              htmltext += "</div><div class=\"row\">";
+            num += 1;
+            htmltext += "<div class=\"col-md-"+col_md+"\"><label>"+item+" = "+buyname[item]+" 元"+"</label></div>";            
+          }
+          htmltext += "</div>";
+          htmltext += "<hr>";
+        }
+        return htmltext;
+      }
+
+      function writeConfirmModal()
+      {
+        var htmltext = "<div class=\"container-fluid\">";
+        /*
+        if (!isEmptyObject(_temabuy))
+        {
+          var num = 0;
+          htmltext += "<div class=\"row\">";
+
+          for (item in _temabuy)
+          {
+            if (num!=0 && num % 4 == 0)
+              htmltext += "</div><div class=\"row\">";
+            num += 1;
+            htmltext += "<div class=\"col-md-3\"><label>"+item+" = "+_temabuy[item]+" 元"+"</label></div>";            
+          }
+          htmltext += "</div>";
+        }*/
+        htmltext += writeRow(_temabuy, 4, 3);
+        htmltext += writeRow(_sxbuy, 2, 6);
+        htmltext += writeRow(_colbuy, 3, 4);
+        htmltext += writeRow(_dsdxbuy, 3, 4);
+
+        htmltext += "<div class=\"row\"><div class=\"col-md-4\"><label>总计： "+sumbuy+" 元"+"</label></div></div>";
+
+        htmltext += "</div>"
+        //alert("htmltext: "+htmltext);
+        $("#confirmModalBodyID").html(htmltext);
+      }
+
+      function getBuyName(inputname) {
+        var temp = new Array();
+        temp = inputname.split("_");
+        return temp[2];
+      }
+
+      function btnsubmit() {
+        res = {};
+        //sum = "";
+        //names = "";
+        _temabuy = {};
+        _dsdxbuy = {};
+        _sxbuy = {};
+        _colbuy = {}; 
+        var isReturn = false;
+        var count = 0;
+        sumbuy = 0;
+
+        $(":text[name^='d_']").each(function(){
+          if ($(this).val().length != 0 && ($(this).val()!="") && isNum($(this).val()))
+          {
+            var inputname = $(this).attr("name");
+            var buyname = getBuyName(inputname);
+            var intvalue = parseInt($(this).val());
+
+            if (inputname.search("tema") != -1) {
+              _temabuy[buyname] = intvalue;
+            }
+            else if (inputname.search("col") != -1) {
+              //if (_colbuy.hasOwnProperty(buyname))
+              //  _colbuy[buyname] += intvalue;
+              //else
+                _colbuy[buyname] = intvalue; 
+            }
+            else if (inputname.search("sx") != -1) {
+              //if (_sxbuy.hasOwnProperty(buyname))
+              //  _sxbuy[buyname] += intvalue; 
+              //else
+                _sxbuy[buyname] = intvalue;
+            }
+            else if (inputname.search("dsdx") != -1) {
+              _dsdxbuy[buyname] = intvalue; 
+            }   
+
+            count += 1;
+            sumbuy += intvalue;          
+          }
+          if (!isNum($(this).val()))
+          {
+            alert("输入错误！ "+$(this).attr("name")+"："+$(this).val()+"，只能输入数字，请从新输入！");
+            isReturn = true;
+            return;
+          }
+        });
+
+        if (isReturn)
+          return;
+
+        if (count == 0)
+        {
+          alert("您没有买入任何特码，不能提交！");
+          return;
+        }
+        //_temabuy = res;
+        //var jsondata = JSON.stringify(_sxbuy); 
+        
+        //alert("json" + jsondata);
+        writeConfirmModal();
+        //alert("ids " +names)
+        //alert("sum "+sum);
+      }
+    </script>
+{% endblock %}

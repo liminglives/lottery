@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {%load staticfiles%}
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'lottery/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'lottery/css/signin.css' %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="form-signin">
+        <h3 class="form-signin-heading">请 输 入</h3>
+        <div id="err"></div>
+        <label for="inputUsername" class="sr-only">账号</label>
+        <input type="email" id="username" class="form-control" placeholder="账号" required autofocus>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" id="password" class="form-control" placeholder="密码" required>
+        <!--<div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me" id="rememberCheck"> Remember me
+          </label>
+        </div>-->
+        <button class="btn btn-lg btn-primary btn-block" id="loginBtn">登 录</button>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="{% static 'lottery/js/jquery.min.js' %}"></script>
+  <script type="text/javascript">
+    function validateString(input) {
+      filter=/^s*[A-Za-z0-9_]{6,15}s*$/
+      return filter.test(input)
+    }
+
+        window.onload = function() {
+            $("#loginBtn").click(function(){
+                var $username = $("#username").val();
+                var $password = $("#password").val();
+                if (!validateString($username) || !validateString($password))
+                {
+                  $("#err").html("<font size=\"2px\" color=\"red\">输入无效，请输入数字（0-9） 或 字母（a-z A-Z） 或 下划线（_）</font> ").show();
+                  return;
+                }
+                //if(false){
+                //    $("#err").html("您输入的帐号或者密码不正确，请重新输入。").show();
+                //}else{
+                //    alert($username+" "+$password+" "+$(".frm_checkbox_label").hasClass("selected")); 
+                //}
+                $.post("auth/", {"username":$username, "password":$password})
+                    .done(function(result) { window.location.href="/lottery/buy/" })
+                    .fail(function(result) { $("#err").html("<font size=\"2px\" color=\"red\">您输入的账号或者密码不正确，请重新输入。</font> ").show(); });
+            });
+
+            $("#rememberCheck").click(function(){
+                if($(".frm_checkbox_label").hasClass("selected")){ 
+                    $(".frm_checkbox_label").removeClass("selected");
+                }else{
+                    $(".frm_checkbox_label").addClass("selected");
+                }
+            });
+        };
+
+  </script>
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  </body>
+</html>
