@@ -1,0 +1,178 @@
+{% extends 'admin_user/base.html' %}
+{%load staticfiles%}
+
+{% block order_active %} 
+active
+{%endblock%}
+
+{% block load_content %}
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="container-fluid">
+        <div class="span8">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>编 号</th>
+                <th>期 数</th>
+                <th>收入 / 中奖</th>
+                <th>净 入</th>
+                <th>状 态</th>
+                <th>操 作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2015001</td>
+                <td>第 1 期</td>
+                <td>222 元 / 22 元</td>
+                <td>200</td>
+                <td>closed</td>
+                <td><button class="btn btn-success btn-sm" onclick="checkDetail('{{ item.order_id }}')">详情</button>
+                    <button class="btn btn-success btn-sm" onclick="checkSum('{{ item.order_id }}')">总单</button>
+                </td>
+              </tr>
+
+<!--
+              {% for item in order_list %}
+              <tr>
+                <td>{{item.round_id}}</td>
+                <td>第 {{ item.round_th }} 期</td>
+                <td>{{ item.buy_amount }} 元 / {{ item.win_amount }} 元</td>
+                <td>{{ item.net_amout }}</td>
+                <td>{{ item.status }}</td>
+                <td><button class="btn btn-success btn-sm" onclick="checkDetail('{{ item.order_id }}')">详情</button>
+                    <button class="btn btn-success btn-sm" onclick="checkSum('{{ item.order_id }}')">总单</button>
+                </td>
+              </tr>
+              {% endfor %}-->
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="detailModalLabel">
+              <div class="row">
+                <div class="col-md-4" id="roundID">
+                  期号：20150327
+                </div>
+                <div class="col-md-2" id="roundTH">   
+                  <span><font size="2px">第 2 期</font></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8">
+                  <span><font size="2px" color="red" id="closedStatus">已开奖   平码：01-03-33-42-32-15  特码：16</font></span> 
+                </div>
+              </div>
+            </h4>
+          </div>
+          <div class="modal-body" id="detailModalBodyID">
+            01 = 22 元
+            <hr>
+            收入 = 22 元   中奖 = 0 元   打出 = 10 元    净收入：-22元
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block load_js %}
+    <script src="{% static 'lottery/js/jquery.min.js' %}"></script>
+    <script src="{% static 'lottery/dist/js/bootstrap.min.js' %}"></script>
+    <script srt="{% static 'lottery/js/jquery.json.min.js' %}"></script>
+    <script type="text/javascript">
+
+    function isEmptyObject(obj){
+      for(var n in obj)
+        return false; 
+      return true; 
+    }
+
+    function writeModal(order_id,detail) {
+      var htmlBody = "";
+      $("#orderID").html("订单号："+order_id);
+      $("#roundTH").html("第 "+detail["roundData"]["round_th"]+" 期");
+      $("#buyTime").html("买入时间："+detail["orderData"]["buy_time"]);
+      if (detail["orderData"]["status"] == "open")
+        $("#closedStatus").html("未开奖，预计开奖时间是 "+detail["roundData"]["result_time"]);
+      else
+        $("#closedStatus").html("已开奖，平码："+detail["roundData"]["pingma"]+",  特码："+detail["roundData"]["tema"]);
+
+      htmlBody = "<div class=\"container-fluid\">";
+      
+      buydata = eval("("+detail["orderData"]["data"]+")");
+      console.log(buydata);
+
+      for (key in buydata)
+      {
+        console.log("key="+key);
+        if (key == "temabuy") {
+          htmlBody += writeRow(buydata["temabuy"], 4, 3);
+          console.log("enter temabuy");
+        }
+        else if (key == "sxbuy")
+          htmlBody += writeRow(buydata["sxbuy"], 2, 6);
+        else if (key == "colbuy")
+          htmlBody += writeRow(buydata["colbuy"], 3, 4);
+        else if (key == "dsdxbuy")
+          htmlBody += writeRow(buydata["dsdxbuy"], 3, 4);
+      } 
+
+      htmlBody += "<div class=\"row\"><div class=\"col-md-3\"><label>买入： "+detail["orderData"]["buy_amount"]+" 元"+"</label></div><div class=\"col-md-3\"><label>中奖： "+detail["orderData"]["win_amount"]+" 元"+"</label></div><div class=\"col-md-3\"><label>净收入： "+(detail["orderData"]["win_amount"]-detail["orderData"]["buy_amount"])+" 元"+"</label></div></div>";
+      htmlBody += "</div>";
+
+      $("#detailModalBodyID").html(htmlBody);
+
+    }
+
+    function writeRow(buyname, rowNum, col_md)
+    {
+        var htmltext = "";
+        if (!isEmptyObject(buyname))
+        {
+          var num = 0;
+          htmltext += "<div class=\"row\">";
+
+          for (item in buyname)
+          {
+            if (num!=0 && num % rowNum == 0)
+              htmltext += "</div><div class=\"row\">";
+            num += 1;
+            htmltext += "<div class=\"col-md-"+col_md+"\"><label>"+item+" = "+buyname[item]+" 元"+"</label></div>";            
+          }
+          htmltext += "</div>";
+          htmltext += "<hr>";
+        }
+        return htmltext;
+    }
+
+
+
+    function checkDetail(order_id) {
+      var success = false;
+      $.get("detail/?page=0&order_id="+order_id, function(data, status){
+        if (status == "success")
+          success = true;
+        order_data = eval("("+data+")");
+        writeModal(order_id, order_data);
+        console.log(order_data["orderData"]);
+        //alert("orderData: "+order_data["orderData"]+" roundData: "+order_data['roundData']);
+        console.log("data:"+data+", status:"+status);
+      });
+      //if (success)
+      $("#detailModal").modal('show');
+    }
+    </script>
+{% endblock %}

@@ -1,6 +1,10 @@
 {% extends 'client/base.html' %}
 {%load staticfiles%}
 
+{% block buy_active %} 
+active
+{%endblock%}
+
 {% block load_content %}
 
         <div class="span8">
@@ -329,7 +333,7 @@
 
         htmltext += "<div class=\"row\"><div class=\"col-md-4\"><label>总计： "+sumbuy+" 元"+"</label></div></div>";
 
-        htmltext += "</div>"
+        htmltext += "</div>";
         //alert("htmltext: "+htmltext);
         $("#confirmModalBodyID").html(htmltext);
       }

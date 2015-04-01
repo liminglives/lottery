@@ -16,6 +16,8 @@ class LotteryUser(models.Model):
     create_date = models.CharField(max_length = 64)
     remark = models.TextField(null=True,blank=True)
     off_percent = models.IntegerField()
+    #buy_sum = models.IntegerField()
+    #win_sum = models.IntegerField()
     deposit = models.IntegerField()
 
 
@@ -35,8 +37,9 @@ class AdminUser(models.Model):
 
 class Order(models.Model):
     order_id = models.CharField(max_length = 128, primary_key=True)
-    round_id = models.ForeignKey('Round')
-    data = models.TextField()
+    #round_th = models.IntegerField()
+    round_id = models.ForeignKey('Round', db_column='round_id')
+    data = models.TextField() #buy_data
     win_data = models.TextField(null=True,blank=True)
     buy_amount = models.IntegerField() 
     win_amount = models.IntegerField()
@@ -49,12 +52,25 @@ class Order(models.Model):
     def __unicode__(self):
         return u'%s %s %s %s'%(self.order_id, self.round_id, self.status, self.username)
 
+'''
+class SumOrder(models.Model):
+    round_id = models.ForeignKey('Round', db_column='round_id')
+    data = models.TextField()
+    win_data = models.TextField(null=True,blank=True)
+    buyout_data = models.TextField(null=True,blank=True)
+    buy_amount = models.IntegerField() 
+    win_amount = models.IntegerField()
+    net_amount = models.IntegerField()
+    buyout_amount = models.IntegerField()
+    sum_data = models.TextField(null=True,blank=True)
+
+'''
 
 class Round(models.Model):
     round_id = models.CharField(max_length = 128, primary_key=True)
     round_th = models.IntegerField()
     open_time = models.CharField(max_length=64)
-    colse_time = models.CharField(max_length=64)
+    colse_time = models.CharField(max_length=64) #closed_time
     result_time = models.CharField(max_length=64)
 
     pingma = models.CharField(max_length = 32)

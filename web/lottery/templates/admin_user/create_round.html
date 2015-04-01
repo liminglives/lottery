@@ -1,0 +1,122 @@
+{% extends 'admin_user/base.html' %}
+{%load staticfiles%}
+
+{% block round_active %}
+active
+{% endblock %}
+
+{% block load_content %}
+<div class="row">
+
+</div>
+<form class="form-horizontal" role="form" method="post" action="submit/" onsubmit="return checkInput();">
+  <div class="form-group">
+    <label for="roundth" class="col-sm-2 control-label">期数</label>
+    <div class="col-sm-8">
+      <input type="text" name="roundth" class="form-control" id="roundth" placeholder="例如： 001">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="opentime" class="col-sm-2 control-label">开放时间</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" name="opentime" name="opentime" id="opentime" placeholder="例如： 2015-04-22 10:30:00">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="closetime" class="col-sm-2 control-label">关闭时间</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" name="closedtime" id="closedtime" placeholder="例如： 2015-04-23 21:15:00">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="resulttime" class="col-sm-2 control-label">开奖时间</label>
+    <div class="col-sm-8">
+      <input type="text" name="resulttime" class="form-control" id="resulttime" placeholder="例如： 2015-04-23 21:30:00">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">提 交</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+
+{% block load_js %}
+
+    <script src="{% static 'lottery/js/jquery.min.js' %}"></script>
+    <script src="{% static 'lottery/dist/js/bootstrap.min.js' %}"></script>
+    <script srt="{% static 'lottery/js/jquery.json.min.js' %}"></script>
+    <script type="text/javascript">
+      function isNum(val) {
+        var z= /^[0-9]*$/;
+        return z.test(val);
+      }
+
+      function CheckDateTime(str)  
+      {   
+        var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;   
+        var r = str.match(reg);   
+        if(r==null)  
+          return false;   
+        else
+          return true;   
+      }
+
+      function strToTimeStamp(dateStr)
+      {
+        var newstr = dateStr.replace(/-/g,'/'); 
+        var date =  new Date(newstr); 
+        var time_str = date.getTime().toString();
+        //console.log(time_str);
+        return time_str.substr(0, 10);
+      }
+
+      function checkInput() {
+        var roundth = $('#roundth').val();
+        if (!isNum(roundth) || roundth.length != 3)
+        {
+          alert("期数的输入不合法，其输入必须为三位数字 [0-9]");
+          return false;
+        }
+        
+        var opentime = $("#opentime").val();
+        var closedtime = $("#closedtime").val();
+        var resulttime =$("#resulttime").val();
+        if (!CheckDateTime(opentime))
+        {
+          alert("开放时间输入格式错误，应为：YYYY-MM-DD HH:MM:SS");
+          return false;
+        }
+        if (!CheckDateTime(closedtime))
+        {
+          alert("关闭时间输入格式错误，应为：YYYY-MM-DD HH:MM:SS");
+          return false;
+        }
+        if (!CheckDateTime(resulttime))
+        {
+          alert("开奖时间输入格式错误，应为：YYYY-MM-DD HH:MM:SS");
+          return false;
+        }
+
+        open = strToTimeStamp(opentime);
+        close = strToTimeStamp(closedtime);
+        result = strToTimeStamp(resulttime);
+        if (open >= close) {
+          alert("关闭时间应大于（晚于）开放时间");
+          return false;
+        }
+        if (close >= result) {
+          alert("开奖时间应大于（晚于）关闭时间");
+          return false;
+        }
+
+        //alert("aaaa");
+        return true;
+      }
+
+    </script>
+
+{% endblock %}

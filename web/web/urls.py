@@ -8,4 +8,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^lottery/', include('lottery.urls')),
+    url(r'^$','lottery.views.redirectLogin',name='home'),
+
 )

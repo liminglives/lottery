@@ -1,0 +1,24 @@
+{% extends 'admin_user/base.html' %}
+{%load staticfiles%}
+
+{% block round_active %}
+
+{% endblock %}
+
+{% block load_content %}
+
+<div class="jumbotron">
+          <h2>{{ error_title }}</h2>
+          <p>{{ error_content }}</p>
+          <p></p>
+</div>
+
+{% endblock %}
+
+{% block load_js %}
+
+    <script src="{% static 'lottery/js/jquery.min.js' %}"></script>
+    <script src="{% static 'lottery/dist/js/bootstrap.min.js' %}"></script>
+    <script srt="{% static 'lottery/js/jquery.json.min.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,312 @@
+{% extends 'admin_user/base.html' %}
+{%load staticfiles%}
+
+{% block round_active %} 
+active
+{%endblock%}
+
+{% block load_content %}
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="container-fluid">
+        <div class="span8">
+          <div class="row">
+            <div class="col-md-4 col-md-offset-10">
+              <button class="btn btn-success btn-md" onclick="createRound()">新建一期</button>
+            </div>
+          </div>
+          <hr>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>编 号</th>
+                <th>期 数</th>
+                <th>特 码</th>
+                <th>状 态</th>
+                <th>操 作</th>
+              </tr>
+            </thead>
+            <tbody>
+<!--              <tr>
+                <td>2015001</td>
+                <td>第 1 期</td>
+                <td>01 02 33 21 22 36 / 45</td>
+                <td>closed</td>
+                <td><button class="btn btn-success btn-sm" onclick="checkDetail('{{ item.order_id }}')">详情</button>
+                </td>
+              </tr>
+-->
+              {% for item in round_list %}
+              <tr>
+                <td>{{item.round_id}}</td>
+                <td>第 {{ item.round_th }} 期</td>
+                <td>{{ item.pingma}} / {{item.tema}}</td>
+                <td>{{ item.status }}</td>
+                <td>
+                  <button class="btn btn-success btn-sm" onclick="checkDetail('{{ item.round_id }}')">详情</button>
+                  {% ifequal item.status 'open' %}
+                  <button class="btn btn-success btn-sm" onclick="updateRound('{{ item.round_id }}')">更新</button>
+                  {% endifequal %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="detailModalLabel">
+              
+            </h4>
+          </div>
+          <div class="modal-body" id="detailModalBodyID">
+
+            <form class="form-horizontal" role="form" method="post" action="submit/" onsubmit="return checkInput();">
+              <div class="form-group">
+                <label for="roundth" class="col-sm-2 control-label">期数</label>
+                <div class="col-sm-4">
+                  <input type="text" name="roundth" class="form-control" id="roundth" placeholder="例如 001">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="opentime" class="col-sm-2 control-label">开放时间</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" name="opentime" name="opentime" id="opentime" placeholder="2015-04-22 10:30:00">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="closetime" class="col-sm-2 control-label">关闭时间</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" name="closedtime" id="closedtime" placeholder="2015-04-23 21:15:00">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="resulttime" class="col-sm-2 control-label">开奖时间</label>
+                <div class="col-sm-4">
+                  <input type="text" name="resulttime" class="form-control" id="resulttime" placeholder="2015-04-23 21:30:00">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pingma" class="col-sm-2 control-label">平码</label>
+                <div class="col-sm-4">
+                  <input type="text" name="pingma" class="form-control" id="pingma" placeholder="01 02 03 04 05 06 / 07">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pingma" class="col-sm-2 control-label">特码</label>
+                <div class="col-sm-4">
+                  <input type="text" name="tema" class="form-control" id="tema" placeholder="07">
+                </div>
+              </div>
+
+
+              <div class="form-group" id="formSubmit">
+                <div class="col-sm-offset-2 col-sm-4">
+                  <button type="submit" class="btn btn-default">提 交</button>
+                </div>
+              </div>
+            </form>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block load_js %}
+    <script src="{% static 'lottery/js/jquery.min.js' %}"></script>
+    <script src="{% static 'lottery/dist/js/bootstrap.min.js' %}"></script>
+    <script srt="{% static 'lottery/js/jquery.json.min.js' %}"></script>
+    <script type="text/javascript">
+
+      function isNum(val) {
+        var z= /^[0-9]*$/;
+        return z.test(val);
+      }
+
+      function CheckDateTime(str)  
+      {   
+        var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;   
+        var r = str.match(reg);   
+        if(r==null)  
+          return false;   
+        else
+          return true;   
+      }
+
+      function strToTimeStamp(dateStr)
+      {
+        var newstr = dateStr.replace(/-/g,'/'); 
+        var date =  new Date(newstr); 
+        var time_str = date.getTime().toString();
+        //console.log(time_str);
+        return time_str.substr(0, 10);
+      }
+
+      function checkInput() {
+        var roundth = $('#roundth').val();
+        if (!isNum(roundth) || roundth.length != 3)
+        {
+          alert("期数的输入不合法，其输入必须为三位数字 [0-9]");
+          return false;
+        }
+        
+        var opentime = $("#opentime").val();
+        var closedtime = $("#closedtime").val();
+        var resulttime =$("#resulttime").val();
+        if (!CheckDateTime(opentime))
+        {
+          alert("开放时间输入格式错误，应为：YYYY-MM-DD HH:MM:SS");
+          return false;
+        }
+        if (!CheckDateTime(closedtime))
+        {
+          alert("关闭时间输入格式错误，应为：YYYY-MM-DD HH:MM:SS");
+          return false;
+        }
+        if (!CheckDateTime(resulttime))
+        {
+          alert("开奖时间输入格式错误，应为：YYYY-MM-DD HH:MM:SS");
+          return false;
+        }
+
+        open = strToTimeStamp(opentime);
+        close = strToTimeStamp(closedtime);
+        result = strToTimeStamp(resulttime);
+        if (open >= close) {
+          alert("关闭时间应大于（晚于）开放时间");
+          return false;
+        }
+        if (close >= result) {
+          alert("开奖时间应大于（晚于）关闭时间");
+          return false;
+        }
+
+        //alert("aaaa");
+        return true;
+      }
+
+
+    function isEmptyObject(obj){
+      for(var n in obj)
+        return false; 
+      return true; 
+    }
+
+    function writeModal1(order_id,detail) {
+      var htmlBody = "";
+      $("#orderID").html("订单号："+order_id);
+      $("#roundTH").html("第 "+detail["roundData"]["round_th"]+" 期");
+      $("#buyTime").html("买入时间："+detail["orderData"]["buy_time"]);
+      if (detail["orderData"]["status"] == "open")
+        $("#closedStatus").html("未开奖，预计开奖时间是 "+detail["roundData"]["result_time"]);
+      else
+        $("#closedStatus").html("已开奖，平码："+detail["roundData"]["pingma"]+",  特码："+detail["roundData"]["tema"]);
+
+      htmlBody = "<div class=\"container-fluid\">";
+      
+      buydata = eval("("+detail["orderData"]["data"]+")");
+      console.log(buydata);
+
+      for (key in buydata)
+      {
+        console.log("key="+key);
+        if (key == "temabuy") {
+          htmlBody += writeRow(buydata["temabuy"], 4, 3);
+          console.log("enter temabuy");
+        }
+        else if (key == "sxbuy")
+          htmlBody += writeRow(buydata["sxbuy"], 2, 6);
+        else if (key == "colbuy")
+          htmlBody += writeRow(buydata["colbuy"], 3, 4);
+        else if (key == "dsdxbuy")
+          htmlBody += writeRow(buydata["dsdxbuy"], 3, 4);
+      } 
+
+      htmlBody += "<div class=\"row\"><div class=\"col-md-3\"><label>买入： "+detail["orderData"]["buy_amount"]+" 元"+"</label></div><div class=\"col-md-3\"><label>中奖： "+detail["orderData"]["win_amount"]+" 元"+"</label></div><div class=\"col-md-3\"><label>净收入： "+(detail["orderData"]["win_amount"]-detail["orderData"]["buy_amount"])+" 元"+"</label></div></div>";
+      htmlBody += "</div>";
+
+      $("#detailModalBodyID").html(htmlBody);
+
+    }
+
+    function writeRow(buyname, rowNum, col_md)
+    {
+        var htmltext = "";
+        if (!isEmptyObject(buyname))
+        {
+          var num = 0;
+          htmltext += "<div class=\"row\">";
+
+          for (item in buyname)
+          {
+            if (num!=0 && num % rowNum == 0)
+              htmltext += "</div><div class=\"row\">";
+            num += 1;
+            htmltext += "<div class=\"col-md-"+col_md+"\"><label>"+item+" = "+buyname[item]+" 元"+"</label></div>";            
+          }
+          htmltext += "</div>";
+          htmltext += "<hr>";
+        }
+        return htmltext;
+    }
+
+    function createRound() {
+      $('#detailModalLabel').html("新建一期");
+      $('#pingma').attr('disabled', 'disabled');
+      $('#tema').attr('disabled', 'disabled');
+      $('#roundth').removeAttr('disabled');
+      $('#opentime').removeAttr('disabled');
+      $('#closedtime').removeAttr('disabled');
+      $('#resulttime').removeAttr('disabled');
+      $('#formSubmit').show();
+      $("#detailModal").modal('show');
+    }
+
+    function writeModal(round_data) {
+      $('#detailModalLabel').html("详情");
+      $('#pingma').val(round_data["pingma"]);
+      $('#pingma').attr('disabled', 'disabled');
+      $('#tema').val(round_data["tema"]);
+      $('#tema').attr('disabled', 'disabled');
+
+      $('#roundth').val(round_data["round_th"]);
+      $('#roundth').attr('disabled', 'disabled');
+      $('#opentime').val(round_data["open_time"]);
+      $('#opentime').attr('disabled', 'disabled');
+      $('#closedtime').val(round_data["colse_time"]);
+      $('#closedtime').attr('disabled', 'disabled');
+      $('#resulttime').val(round_data["result_time"]);
+      $('#resulttime').attr('disabled', 'disabled');
+      $('#formSubmit').hide();
+
+      $("#detailModal").modal('show');
+     
+    }
+
+    function checkDetail(round_id) {
+      var success = false;
+      $.get("detail/?page=0&round_id="+round_id, function(data, status){
+        if (status == "success")
+          success = true;
+        round_data = eval("("+data+")");
+        writeModal(round_data);
+        console.log(round_data["orderData"]);
+        //alert("orderData: "+order_data["orderData"]+" roundData: "+order_data['roundData']);
+        console.log("data:"+data+", status:"+status);
+      });
+      //if (success)
+      $("#detailModal").modal('show');
+    }
+    </script>
+{% endblock %}
