@@ -63,11 +63,45 @@ def getRoundDetail(request):
         roundDtail = Round.objects.values('round_id', 'round_th', 'open_time', 'colse_time', \
             'result_time', 'status', 'pingma', 'tema').filter(round_id=request.GET['round_id'])[0]
         data = json.dumps(roundDtail)
+        print data
     except Exception, e:
         print e
         print 'admin getRoundDetail error'
 
     return HttpResponse(data)
+
+@csrf_exempt
+def updateRound(request):
+    print 'enter admin update round'
+    if not common.checkAdminCookies(request):
+        print "cookies error"
+        return HttpResponseRedirect('/lottery/admin/login/')
+    
+    print request.POST
+    status = "open"
+
+    if len(request.POST['pingma']) > 0:
+        status = 'closed'
+    try:
+        roundItem = Round.objects.get(round_id=request.GET['round_id'])
+        
+        roundItem.round_th = int(request.POST['roundth'])
+        roundItem.open_time = request.POST['opentime']
+        roundItem.colse_time = request.POST['closedtime']
+        roundItem.result_time = request.POST['resulttime']
+        roundItem.status = status
+        roundItem.pingma = request.POST['pingma']
+        roundItem.tema = request.POST['tema']
+        
+        #roundItem.update(round_th=int(request.POST['roundth']), open_time=request.POST['opentime'],\
+        #    colse_time=request.POST['closedtime'], result_time=request.POST['resulttime'], status=status,\
+        #    pingma=request.POST['pingma'], tema=request.POST['tema'])
+        roundItem.save()
+    except Exception, e:
+        print 'update round error'
+        print e
+
+    return HttpResponseRedirect('/lottery/admin/round/')    
 
 @csrf_exempt
 def submitRound(request):

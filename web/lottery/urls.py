@@ -37,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^admin/round/create/$', adminViews.createRound, name="createRoundAdmin"),
     url(r'^admin/round/create/submit/$', adminViews.submitRound, name="submitRoundAdmin"),
     url(r'^admin/round/submit/$', adminViews.submitRound, name="submitRoundAdmin"),
+    url(r'^admin/round/update/$', adminViews.updateRound, name="updateRoundAdmin"),
     url(r'^admin/round/detail/$', adminViews.getRoundDetail, name="getRoundDetailAdmin"),
 
 

@@ -68,7 +68,13 @@ active
           </div>
           <div class="modal-body" id="detailModalBodyID">
 
-            <form class="form-horizontal" role="form" method="post" action="submit/" onsubmit="return checkInput();">
+            <form id="formID" class="form-horizontal" role="form" method="post" action="submit/" onsubmit="return checkInput();">
+              <div class="form-group">
+                <label for="roundid" class="col-sm-2 control-label">编号</label>
+                <div class="col-sm-4">
+                  <input type="text" name="roundid" class="form-control" id="roundid" placeholder="" disabled="disabled">
+                </div>
+              </div>
               <div class="form-group">
                 <label for="roundth" class="col-sm-2 control-label">期数</label>
                 <div class="col-sm-4">
@@ -270,16 +276,19 @@ active
       $('#closedtime').removeAttr('disabled');
       $('#resulttime').removeAttr('disabled');
       $('#formSubmit').show();
+      $('#formID').attr('action', 'submit/');
       $("#detailModal").modal('show');
     }
 
-    function writeModal(round_data) {
+    function writeDetailModal(round_data) {
       $('#detailModalLabel').html("详情");
       $('#pingma').val(round_data["pingma"]);
       $('#pingma').attr('disabled', 'disabled');
       $('#tema').val(round_data["tema"]);
       $('#tema').attr('disabled', 'disabled');
 
+      $('#roundid').val(round_data["round_id"]);
+      //$('#roundid').attr('disabled', 'disabled'); 
       $('#roundth').val(round_data["round_th"]);
       $('#roundth').attr('disabled', 'disabled');
       $('#opentime').val(round_data["open_time"]);
@@ -294,13 +303,55 @@ active
      
     }
 
+    function writeModalUpdate(round_data) {
+      //var round_data = getRoundData(round_id);
+      //console.log('updata ' + round_data);
+      $('#detailModalLabel').html("更新");
+
+      
+      $('#pingma').removeAttr('disabled');
+      $('#tema').removeAttr('disabled');
+      $('#roundth').removeAttr('disabled');
+      $('#opentime').removeAttr('disabled');
+      $('#closedtime').removeAttr('disabled');
+      $('#resulttime').removeAttr('disabled');
+
+      $('#pingma').val(round_data["pingma"]);
+      $('#tema').val(round_data["tema"]);
+
+      $('#roundid').val(round_data["round_id"]);
+      //$('#roundid').attr('disabled', 'disabled'); 
+      $('#roundth').val(round_data["round_th"]);
+      $('#opentime').val(round_data["open_time"]);
+      $('#closedtime').val(round_data["colse_time"]);
+      $('#resulttime').val(round_data["result_time"]);
+
+      $('#formSubmit').show();
+      $('#formID').attr('action', 'update/?round_id='+round_data["round_id"]);
+      $("#detailModal").modal('show');
+    }
+
+    function updateRound(round_id) {
+      var success = false;
+      var round_data = {};
+      $.get("detail/?page=0&round_id="+round_id, function(data, status){
+        if (status == "success")
+          success = true;
+        round_data = eval("("+data+")");
+        writeModalUpdate(round_data);
+        //console.log(round_data);
+      });
+      //console.log(round_data);
+      return round_data;
+    }
+
     function checkDetail(round_id) {
       var success = false;
       $.get("detail/?page=0&round_id="+round_id, function(data, status){
         if (status == "success")
           success = true;
         round_data = eval("("+data+")");
-        writeModal(round_data);
+        writeDetailModal(round_data);
         console.log(round_data["orderData"]);
         //alert("orderData: "+order_data["orderData"]+" roundData: "+order_data['roundData']);
         console.log("data:"+data+", status:"+status);
