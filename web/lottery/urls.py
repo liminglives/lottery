@@ -27,6 +27,10 @@ urlpatterns = patterns('',
 
     # admin 
     url(r'^admin/order/$', adminViews.getOrder, name='getOrderAdmin'),
+    url(r'^admin/order/detail/$', adminViews.getSumOrderDetail, name='getSumOrderDetailAdmin'),
+    url(r'^admin/order/round/$', adminViews.getOrderbyRound, name='getOrderbyRoundAdmin'),
+    url(r'^admin/order/round/detail/$', adminViews.getOrderDetail, name='getOrderDetailAdmin'),
+
     url(r'^admin/login/$', adminViews.login, name='loginAdmin'),
     url(r'^admin/login/auth/$', adminViews.loginAuth, name='loginAuthAdmin'),
     url(r'^admin/home/$', adminViews.home, name="homeAdmin"),

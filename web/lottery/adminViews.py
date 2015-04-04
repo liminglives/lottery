@@ -17,7 +17,64 @@ def getOrder(request):
         print "cookies error"
         return HttpResponseRedirect('/lottery/admin/login/')
 
-    return render_to_response("admin_user/order.html")
+    round_sumorder_list = []
+    rounds = Round.objects.values('round_id', 'round_th', 'status').all()
+    for item in rounds:
+        sumorders = SumOrder.objects.values("buy_amount", "win_amount", "net_amount").filter(round_id=item['round_id'])
+        dic = {"round":item}
+        if len(sumorders) == 0: 
+            dic["sumorder"] = {}
+        else:
+            dic["sumorder"] = sumorders[0]
+        round_sumorder_list.append(dic)
+
+    return render_to_response("admin_user/order.html", {"round_sumorder_list":round_sumorder_list})
+
+def getOrderbyRound(request):
+    print 'enter admin getOrderbyRound'
+    if not common.checkAdminCookies(request):
+        print "cookies error"
+        return HttpResponseRedirect('/lottery/admin/login/')
+
+    roundID = request.GET['round_id']
+    orderList = Order.objects.values('order_id', 'buy_amount', 'win_amount', 'net_amount', 'buy_time', 'username').filter(round_id=roundID)
+
+    return render_to_response('admin_user/order_round.html', {'order_list':orderList})
+
+def getSumOrderDetail(request):
+    print 'enter admin getSumOrderDetail'
+    if not common.checkAdminCookies(request):
+        print "cookies error"
+        return HttpResponseRedirect('/lottery/admin/login/')    
+
+    roundID = request.GET['round_id']
+    roundData = Round.objects.values("round_id", "round_th", "status", "colse_time").filter(round_id=roundID)[0]
+    sumData = SumOrder.objects.values("data", "buy_amount", "win_amount", "net_amount").filter(round_id=roundID)[0]
+    data = {'sumData':sumData, "roundData":roundData}
+    return HttpResponse(json.dumps(data))
+
+def getOrderDetail(request):
+    print 'enter getOrderDetail'
+    print request.GET
+
+    if not common.checkAdminCookies(request):
+        print "cookies error"
+        return HttpResponseRedirect('/lottery/admin/login/')
+    orderData = None
+    data = None
+    try:
+        orderData = Order.objects.values('round_id', 'buy_amount', 'win_amount',\
+            'buy_time', 'status', 'data', 'win_data').filter(order_id=request.GET['order_id'])[0]
+        #roundData = Round.objects.values('round_th', 'result_time', 'pingma', 'tema').filter(round_id=orderData['round_id'])[0]
+        #orderData['status_'] = common.transStatus(orderData['status'])
+        #roundData["result_time"] = common.timeStampToTime(roundData["result_time"])
+        data = json.dumps({'orderData':orderData})
+        print data
+    except Exception, e:
+        print e
+
+    return HttpResponse(data)
+
 
 def login(request):
     print "enter admin login"
@@ -116,6 +173,13 @@ def submitRound(request):
     roundID = roundID + roundth
     isExist = False
 
+    
+    if len(Round.objects.filter(status='open')) > 0:
+        errorTitle = "新 建 一 期 失 败！"
+        errorContent = "上一期未结束，不能新建一期"
+        return render_to_response("admin_user/error.html", {'title':errorTitle, 'content':errorContent})
+    
+
     try:
         Round.objects.get(round_id = roundID)
         isExist = True
@@ -125,7 +189,7 @@ def submitRound(request):
     if isExist:
         errorTitle = "新 建 一 期 失 败！"
         errorContent = "期数已存在，请重新输入期数"
-        return render_to_response("admin_user/error.html", {'error_title':errorTitle, 'error_content':errorContent})
+        return render_to_response("admin_user/error.html", {'title':errorTitle, 'content':errorContent})
 
     try:
         newRound = Round(round_id=roundID, round_th=int(roundth), open_time=request.POST['opentime'],
@@ -136,9 +200,20 @@ def submitRound(request):
         print e
         errorTitle = "新 建 一 期 失 败！"
         errorContent = "请重新创建"
-        return render_to_response("admin_user/error.html", {'error_title':errorTitle, 'error_content':errorContent})
+        return render_to_response("admin_user/error.html", {'title':errorTitle, 'content':errorContent})
+
+    try:
+        newSumOrder = SumOrder(round_id=Round.objects.get(round_id=roundID), data="", buy_amount=0,\
+         win_amount=0, net_amount=0,buyout_amount=0)
+        newSumOrder.save()
+    except Exception, e:
+        print "create new sumorder failed"
+        print e
 
     return HttpResponseRedirect('/lottery/admin/round/')
+
+def error_notice(title, content, buttonInfo):
+    return render_to_response("admin_user/error.html", {'title':title, 'content':content, 'button_info':buttonInfo})
 
 
 @csrf_exempt
@@ -164,7 +239,7 @@ def loginAuth(request):
         print e
     if user:
         response = HttpResponse()
-        response.set_cookie('username',request.POST["username"])
+        response.set_cookie('adminusername',request.POST["username"])
 
         return response
     else:

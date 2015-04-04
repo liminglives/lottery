@@ -9,6 +9,7 @@ active
 
         <div class="span8">
           <!--<form role="form" class="form-horizontal">-->
+          <div class="row"><div class="col-md-2"> <label id='roundid' name="{{round.round_id}}">您现在购买的是第 {{round.round_th}} 期</label> </div></div>
             <div >
               <hr>
               <label>特 码</label>
@@ -175,6 +176,9 @@ active
       var _sxbuy = {};
       var _colbuy = {};
       var _dsdxbuy = {};
+      var _nzhongn = {};
+      var _nyou = {};
+      var _fushi = {};
       var res = {};
       var sumbuy = 0;
 
@@ -187,7 +191,8 @@ active
         if (!isEmptyObject(_colbuy))
           databuy["colbuy"] = _colbuy;
         if (!isEmptyObject(_dsdxbuy))
-          databuy["dsdxbuy"] = _dsdxbuy; 
+          databuy["dsdxbuy"] = _dsdxbuy;
+        
 
         $.post("submit/", 
                {//"temabuy":JSON.stringify(_temabuy), 
@@ -195,7 +200,8 @@ active
                 //"colbuy":JSON.stringify(_colbuy),
                 //"dsdxbuy":JSON.stringify(_dsdxbuy),
                 "databuy":JSON.stringify(databuy),
-                "sumbuy":sumbuy})
+                "sumbuy":sumbuy,
+                "roundid":$('#roundid').attr('name')})
           .done(function(result) {window.location.href="success/"})
           .fail(function(result) {alert("提交失败 "+result)})
       }

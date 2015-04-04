@@ -56,7 +56,13 @@ def buy(request):
         print "cookies error"
         return HttpResponseRedirect('/lottery/login/')
 
-    return render_to_response('client/buy.html');
+    rounds =  Round.objects.filter(status = 'open')
+    if len(rounds) == 0:
+        title = "现在不能购买！"
+        content = "非常抱歉，目前新的一期还没有开放购买，请稍后再来，谢谢！"
+        return render_to_response('client/error_notice.html', {'title':title, 'content':content})
+
+    return render_to_response('client/buy.html', {'round':rounds[0]})
 
 def buy_success(request):
     return render_to_response('client/success_buy.html')
@@ -72,10 +78,14 @@ def buy_submit(request):
         print "cookies error"
         return HttpResponseRedirect('/lottery/login/')
 
+    print request.POST, request.COOKIES
+
+    roundID = request.POST['roundid']
+
     #check the deadline
     try:
         username = request.COOKIES["username"]
-        newOrder = Order(order_id=common.genOrderID(), round_id=Round.objects.get(round_id=common.getCurRoundID()),
+        newOrder = Order(order_id=common.genOrderID(roundID), round_id=Round.objects.get(round_id=roundID),
             data=request.POST['databuy'], win_data="", buy_time=common.getCurTime(),
             buy_amount=int(request.POST['sumbuy']), win_amount=0, net_amount=0,
             status='open', username=LotteryUser.objects.get(username=username))
@@ -87,6 +97,21 @@ def buy_submit(request):
         print 'buy_submit causes exception'
         print e 
         return HttpResponseForbidden()
+
+    sumorder = None
+    try:
+        sumorder = SumOrder.objects.get(round_id=roundID)
+        if len(sumorder.data) == 0:
+            sumorder.data = request.POST['databuy']
+            sumorder.buy_amount = int(request.POST['sumbuy'])
+        else:
+            sumorder.data = common.mergeBuyData(sumorder.data, request.POST['databuy'])
+            sumorder.buy_amount = int(request.POST['sumbuy']) + sumorder.buy_amount
+        sumorder.save()
+    except Exception, e:
+        print 'buy_submit merge to sumorder'
+        print e
+        return HttpResponseForbidden()        
 
     print request.POST
     return HttpResponse("提交成功")
@@ -124,7 +149,7 @@ def getOrderDetail(request):
             'buy_time', 'status', 'data', 'win_data').filter(username=request.COOKIES['username'], order_id=request.GET['order_id'])[0]
         roundData = Round.objects.values('round_th', 'result_time', 'pingma', 'tema').filter(round_id=orderData['round_id'])[0]
         orderData['status_'] = common.transStatus(orderData['status'])
-        roundData["result_time"] = common.timeStampToTime(roundData["result_time"])
+        #roundData["result_time"] = common.timeStampToTime(roundData["result_time"])
         data = json.dumps({'orderData':orderData, 'roundData':roundData})
         print data
     except Exception, e:

@@ -52,7 +52,7 @@ class Order(models.Model):
     def __unicode__(self):
         return u'%s %s %s %s'%(self.order_id, self.round_id, self.status, self.username)
 
-'''
+
 class SumOrder(models.Model):
     round_id = models.ForeignKey('Round', db_column='round_id')
     data = models.TextField()
@@ -64,11 +64,11 @@ class SumOrder(models.Model):
     buyout_amount = models.IntegerField()
     sum_data = models.TextField(null=True,blank=True)
 
-'''
+
 
 class Round(models.Model):
     round_id = models.CharField(max_length = 128, primary_key=True)
-    round_th = models.IntegerField()
+    round_th = models.IntegerField() #should be char
     open_time = models.CharField(max_length=64)
     colse_time = models.CharField(max_length=64) #closed_time
     result_time = models.CharField(max_length=64)
@@ -76,7 +76,7 @@ class Round(models.Model):
     pingma = models.CharField(max_length = 32)
     tema = models.CharField(max_length = 4)
 
-    status = models.CharField(max_length=16)
+    status = models.CharField(max_length=16) #open, stop, closed
 
     def __unicode__(self):
         return u'%s %s %s'%(self.round_id, self.round_th, self.open_time)

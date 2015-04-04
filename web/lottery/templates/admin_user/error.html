@@ -6,13 +6,16 @@
 {% endblock %}
 
 {% block load_content %}
-
-<div class="jumbotron">
-          <h2>{{ error_title }}</h2>
-          <p>{{ error_content }}</p>
+        <div class="jumbotron">
+          <h2>{{title}}</h2>
+          <p>{{content}}</p>
           <p></p>
-</div>
-
+          {% if button_info %}
+          <p>
+            <a class="btn btn-lg btn-primary" href="{{button_info.href}}" role="button">{{button_info.name}} &raquo;</a>
+          </p>
+          {%endif%}
+        </div>
 {% endblock %}
 
 {% block load_js %}

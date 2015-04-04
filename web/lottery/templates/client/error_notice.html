@@ -1,0 +1,14 @@
+{% extends 'client/base.html' %}
+
+{% block load_content %} 
+        <div class="jumbotron">
+          <h2>{{title}}</h2>
+          <p>{{content}}</p>
+          <p></p>
+          {% if button_set %}
+          <p>
+            <a class="btn btn-lg btn-primary" href="{{button_set.href}}" role="button">{{button_set.name}} &raquo;</a>
+          </p>
+          {%endif%}
+        </div>
+{% endblock %}
